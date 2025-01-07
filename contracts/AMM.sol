@@ -4,7 +4,14 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "./Token.sol";
 
+// [] App with only 1 trading pair
+// [] Manages liquidity
+// [] Manages swaps
+// [] Manages withdrawals
 contract AMM {
+
+    // State Variables
+    // Calling the Token contract as token1 and token2
     Token public token1;
     Token public token2;
 
@@ -27,6 +34,7 @@ contract AMM {
         uint256 timestamp
     );
 
+    // Setting the state variables
     constructor(Token _token1, Token _token2) {
         token1 = _token1;
         token2 = _token2;

@@ -15,6 +15,7 @@ contract AMM {
     Token public token1;
     Token public token2;
 
+    // Variables to keep track of the balances of the tokens
     uint256 public token1Balance;
     uint256 public token2Balance;
     uint256 public K;
@@ -23,6 +24,7 @@ contract AMM {
     mapping(address => uint256) public shares;
     uint256 constant PRECISION = 10**18;
 
+    // Event to emit when a swap occurs
     event Swap(
         address user,
         address tokenGive,
@@ -40,8 +42,14 @@ contract AMM {
         token2 = _token2;
     }
 
+    // Function to add liquidity to the pool
+    // Deposits tokens
+    // Issues shares
+    // Manages pool
     function addLiquidity(uint256 _token1Amount, uint256 _token2Amount) external {
+        
         // Deposit Tokens
+        // 3 Args for transferFrom in Token.sol
         require(
             token1.transferFrom(msg.sender, address(this), _token1Amount),
             "failed to transfer token 1"
@@ -110,9 +118,10 @@ contract AMM {
             token2Amount--;
         }
 
-        require(token2Amount < token2Balance, "swap amount to large");
+        require(token2Amount < token2Balance, "swap amount too large");
     }
 
+    // Swaps token1 for token2
     function swapToken1(uint256 _token1Amount)
         external
         returns(uint256 token2Amount)
@@ -154,7 +163,7 @@ contract AMM {
             token1Amount--;
         }
 
-        require(token1Amount < token1Balance, "swap amount to large");
+        require(token1Amount < token1Balance, "swap amount too large");
     }
 
     function swapToken2(uint256 _token2Amount)

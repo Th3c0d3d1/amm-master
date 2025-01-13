@@ -115,7 +115,9 @@ describe('AMM', () => {
       // Check pool shares
       expect(await amm.totalShares()).to.equal(tokens(100))
 
-      // LP provides more liquidity to AMM
+      // ------------------------------------------------
+      // LP provides additional liquidity to AMM
+      // ------------------------------------------------
       amount = tokens(50000)
       transaction = await token1.connect(liquidityProvider).approve(amm.address, amount)
       await transaction.wait()
@@ -123,12 +125,21 @@ describe('AMM', () => {
       transaction = await token2.connect(liquidityProvider).approve(amm.address, amount)
       await transaction.wait()
 
+      // Calculate token2 deposit amount
+      let token2Deposit = await amm.calculateToken2Deposit(amount)
+
       // LP provides liquidity to AMM
-      transaction = await amm.connect(liquidityProvider).addLiquidity(amount, amount)
+      transaction = await amm.connect(liquidityProvider).addLiquidity(amount, token2Deposit)
       await transaction.wait()
 
       // Check if AMM has liquidity (50 shares)
       expect(await amm.shares(liquidityProvider.address)).to.equal(tokens(50))
+
+      // Deployer should still have 100 shares
+      expect(await amm.shares(deployer.address)).to.equal(tokens(100))
+
+      // Pool shares should be 150
+      expect(await amm.totalShares()).to.equal(tokens(150))
     })
   })
 })

@@ -93,8 +93,42 @@ describe('AMM', () => {
       transaction = await token1.connect(deployer).approve(amm.address, amount)
       await transaction.wait()
 
-      transaction = await token2(deployer).approve(amm.address, amount)
+      transaction = await token2.connect(deployer).approve(amm.address, amount)
       await transaction.wait()
+
+      // Deployer provides liquidity to AMM
+      transaction = await amm.connect(deployer).addLiquidity(amount, amount)
+      await transaction.wait()
+
+      // Check if AMM has liquidity
+      expect(await token1.balanceOf(amm.address)).to.equal(amount)
+      expect(await token2.balanceOf(amm.address)).to.equal(amount)
+
+      expect(await amm.token1Balance()).to.equal(amount)
+      expect(await amm.token2Balance()).to.equal(amount)
+
+      console.log(await amm.K())
+
+      // Check deployer's liquidity
+      expect(await amm.shares(deployer.address)).to.equal(tokens(100))
+
+      // Check pool shares
+      expect(await amm.totalShares()).to.equal(tokens(100))
+
+      // LP provides more liquidity to AMM
+      amount = tokens(50000)
+      transaction = await token1.connect(liquidityProvider).approve(amm.address, amount)
+      await transaction.wait()
+
+      transaction = await token2.connect(liquidityProvider).approve(amm.address, amount)
+      await transaction.wait()
+
+      // LP provides liquidity to AMM
+      transaction = await amm.connect(liquidityProvider).addLiquidity(amount, amount)
+      await transaction.wait()
+
+      // Check if AMM has liquidity (50 shares)
+      expect(await amm.shares(liquidityProvider.address)).to.equal(tokens(50))
     })
   })
 })

@@ -18,10 +18,18 @@ contract AMM {
     // Variables to keep track of the balances of the tokens
     uint256 public token1Balance;
     uint256 public token2Balance;
+
+    // Variable to keep track of the LP token balance
     uint256 public K;
 
+    // Total Contract Shares
+    // Initial value is 0
     uint256 public totalShares;
+
+    // Mapping to keep track of the shares of the users
     mapping(address => uint256) public shares;
+
+    // Used to calculate the precise amount of tokens to be swapped
     uint256 constant PRECISION = 10**18;
 
     // Event to emit when a swap occurs
@@ -62,13 +70,18 @@ contract AMM {
         // Issue Shares
         uint256 share;
 
-        // If first time adding liquidity, make share 100
+        // Initial liquidity addition, make share (LP token) worth 100
         if (totalShares == 0) {
             share = 100 * PRECISION;
         } else {
+
+            // Calculate subsequent shares
             uint256 share1 = (totalShares * _token1Amount) / token1Balance;
             uint256 share2 = (totalShares * _token2Amount) / token2Balance;
             require(
+
+                // Check if the share1 and share2 are equal
+                // Rounding to 3 decimal places to avoid precision errors
                 (share1 / 10**3) == (share2 / 10**3),
                 "must provide equal token amounts"
             );
@@ -78,6 +91,8 @@ contract AMM {
         // Manage Pool
         token1Balance += _token1Amount;
         token2Balance += _token2Amount;
+
+        // LP Token Balance
         K = token1Balance * token2Balance;
 
         // Updates shares

@@ -132,7 +132,6 @@ contract AMM {
         if (token2Amount == token2Balance) {
             token2Amount--;
         }
-
         require(token2Amount < token2Balance, "swap amount too large");
     }
 

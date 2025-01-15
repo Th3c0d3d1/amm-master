@@ -40,10 +40,10 @@ describe('AMM', () => {
     // Deploy Tokens to be used in AMM Contact (deployer)
     // ------------------------------------------------
 
-    // Look in ethers and use the getContractFactory method with the Token contract as an argument
+    // Use the await method & look in ethers library and use the getContractFactory method with the Token contract as an argument
     const Token = await ethers.getContractFactory('Token')
 
-    // Look in Token contract and use the deploy method with the following arguments
+    // Use the await method & look in Token contract and use the deploy method with the following arguments
     token1 = await Token.deploy('Saucy Sam', 'SSM', '1000000')
     token2 = await Token.deploy('USD Token', 'USD', '1000000')
 
@@ -54,7 +54,7 @@ describe('AMM', () => {
     // Token 1
     // ------------------------------------------------
 
-    // Take token1 & token2 contracts and use the connect method with the deployer as an argument, then use the transfer method with the liquidity provider address and 100k tokens as arguments to send 100k of token1 & token2 to the liquidity provider
+    // Use the await method & take token1 & token2 contracts and use the connect method with the deployer as an argument, then use the transfer method with the liquidity provider address and 100k tokens as arguments to send 100k of token1 & token2 to the liquidity provider
     let transaction = await token1.connect(deployer).transfer(liquidityProvider.address, tokens(100000))
     await transaction.wait()
 
@@ -85,7 +85,7 @@ describe('AMM', () => {
     // Deposit token1 & token2 into AMM
     // ------------------------------------------------
 
-    // Look in ethers and use the getContractFactory method with the AMM contract as an argument
+    // Use the await method with ethers and use the getContractFactory method with the AMM contract as an argument
     const AMM = await ethers.getContractFactory('AMM')
 
     // Use the await method with the AMM contract deploy method with token1 & token2 addresses as arguments to deploy the AMM contract
@@ -137,7 +137,7 @@ describe('AMM', () => {
       // Deployer approves AMM to spend 100k tokens
       // ------------------------------------------------
 
-      // Take token1 & token2 and use the connect method with the deployer as an argument, then use the approve method with the amm address and 100k tokens as arguments to approve the AMM to spend 100k of token1 & token2
+      // Use the await method with token1 & token2 contracts and use the connect method with the deployer as an argument, then use the approve method with the amm address and 100k tokens as arguments to approve the AMM to spend 100k of token1 & token2
       transaction = await token1.connect(deployer).approve(amm.address, amount)
       await transaction.wait()
 
@@ -148,7 +148,7 @@ describe('AMM', () => {
       // Deployer provides liquidity to AMM
       // ------------------------------------------------
 
-      // Take the AMM contract and use the connect method with the deployer as an argument, then use the addLiquidity method with the amount as an argument to add 100k of token1 & token2 to the AMM
+      // Use the await method with the AMM contract and use the connect method with the deployer as an argument, then use the addLiquidity method with the amount as an argument to add 100k of token1 & token2 to the AMM
       transaction = await amm.connect(deployer).addLiquidity(amount, amount)
       await transaction.wait()
 
@@ -174,14 +174,16 @@ describe('AMM', () => {
       expect(await amm.shares(deployer.address)).to.equal(tokens(100))
 
       // Check pool shares
-      expect(await amm.totalShares()).to.equal(tokens(100))
+      // Use await method with the amm contract totalShares method to equal 100 shares
+      let totalShares = await amm.totalShares()
+      expect(totalShares).to.equal(tokens(100))
 
       // ------------------------------------------------
       // LP provides additional liquidity to AMM contract
       // ------------------------------------------------
       amount = tokens(50000)
 
-      // Use the await method with the token1 & token2 contract balance with the liquidity provider address as an argument to approve the AMM contract address to spend 50k of token1 & token2
+      // Use the await method with the token1 & token2 contracts & use the connect method with the liquidity provider address as an argument, then use the approve method with the AMM contract address & amount as arguments to spend 50k of token1 & token2
       transaction = await token1.connect(liquidityProvider).approve(amm.address, amount)
       await transaction.wait()
 

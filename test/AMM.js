@@ -126,7 +126,9 @@ describe('AMM', () => {
     // Swap Variables
     let amount,
         transaction,
-        result
+        result,
+        estimate,
+        balance
 
     it('facilitates swaps', async () => {
       
@@ -164,7 +166,7 @@ describe('AMM', () => {
       expect(await amm.token2Balance()).to.equal(amount)
 
       // Check if AMM has shares
-      console.log(await amm.K())
+      // console.log(await amm.K())
 
       // ------------------------------------------------
       // Check deployer's liquidity
@@ -205,6 +207,38 @@ describe('AMM', () => {
 
       // Pool shares should be 150
       expect(await amm.totalShares()).to.equal(tokens(150))
+
+      // ------------------------------------------------
+      // Investor1 swaps tokens
+      // ------------------------------------------------
+
+      // Investor1 approves all tokens
+      transaction = await token1.connect(investor1).approve(amm.address, tokens(100000))
+
+      // Check Investor1 token1 balance before swap
+      balance = await token2.balanceOf(investor1.address)
+      console.log(`\nInvestor1 token1 balance before swap: ${ethers.utils.formatUnits(balance)}`)
+
+      // Estimate amount of tokens investor1 will receive after swappnig token1 including slippage
+      estimate = await amm.calculateToken1Swap(tokens(1))
+      console.log(`Investor1 estimated token1 swap: ${ethers.utils.formatUnits(estimate)}`)
+
+      // Investor1 swaps 1 token1 for token2
+      transaction = await amm.connect(investor1).swapToken1(tokens(1))
+      result = await transaction.wait()
+
+      // Check Investor1 token1 balance after swap
+      balance = await token2.balanceOf(investor1.address)
+      console.log(`Investor1 token1 balance after swap: ${ethers.utils.formatUnits(balance)}\n`)
+      expect(estimate).to.equal(balance)
+
+      // ------------------------------------------------
+      // Check AMM token balances are in sync
+      // ------------------------------------------------
+
+      // Use the expect method with the await method as an argument with the token contract balanceOf method with the AMM contract address as an argument to check if the token contract balances are in sync using the await method as an argument of the equal method & the amm contract tokenBalance methods
+      expect(await token1.balanceOf(amm.address)).to.equal(await amm.token1Balance())
+      expect(await token2.balanceOf(amm.address)).to.equal(await amm.token2Balance())
     })
   })
 })

@@ -119,13 +119,19 @@ contract AMM {
     }
 
     // Returns amount of token2 received when swapping token1
+    // public ---> Can be called inside & outside the contract
     function calculateToken1Swap(uint256 _token1Amount)
         public
         view
         returns (uint256 token2Amount)
     {
+        // Estimate the amount of token1 in the pool after the swap
         uint256 token1After = token1Balance + _token1Amount;
+
+        // Calculate the amount of token2 that will be left in the pool
         uint256 token2After = K / token1After;
+
+        // Calculate the amount of token2 user will be receive
         token2Amount = token2Balance - token2After;
 
         // Don't let the pool go to 0
@@ -136,20 +142,40 @@ contract AMM {
     }
 
     // Swaps token1 for token2
+    // external ---> Called outside the contract
+    // _token1Amount ---> Argument with amount of token1 to be swapped for token2
+    // returns token2Amount ---> Returns the amount of token2 received
     function swapToken1(uint256 _token1Amount)
         external
         returns(uint256 token2Amount)
     {
         // Calculate Token 2 Amount
+        // Using the calculateToken1Swap function to honor the amount shown in the UI
         token2Amount = calculateToken1Swap(_token1Amount);
 
+        // ------------------------------
         // Do Swap
+        // ------------------------------
+
+        // Transfer token1 from the user to the contract
+        // Use the transferFrom function from the Token contract with 3 arguments
         token1.transferFrom(msg.sender, address(this), _token1Amount);
+
+        // Update the balance of token1 in the contract
         token1Balance += _token1Amount;
+
+        // Subtract the amount of token2 from the pool
+        // Update the balance of token2 in the contract
         token2Balance -= token2Amount;
+
+        // Transfer token2 to the user
+        // Use the transfer function from the Token contract with 2 arguments
         token2.transfer(msg.sender, token2Amount);
 
+        // ------------------------------
         // Emit an event
+        // ------------------------------
+        
         emit Swap(
             msg.sender,
             address(token1),

@@ -45,15 +45,12 @@ describe('Token', () => {
     it('assigns total supply to deployer', async () => {
       expect(await token.balanceOf(deployer.address)).to.equal(totalSupply)
     })
-
   })
-
 
   describe('Sending Tokens', () => {
     let amount, transaction, result
 
     describe('Success', () => {
-
       beforeEach(async () => {
         amount = tokens(100)
         transaction = await token.connect(deployer).transfer(receiver.address, amount)

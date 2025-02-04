@@ -4,13 +4,16 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "./Token.sol";
 
-// [] App with only 1 trading pair
-// [] Manages liquidity
-// [] Manages swaps
+// [X] App with only 1 trading pair
+// [X] Manages liquidity
+// [X] Manages swaps
 // [] Manages withdrawals
 contract AMM {
 
+    // ------------------------------
     // State Variables
+    // ------------------------------
+
     // Calling the Token contract as token1 and token2
     Token public token1;
     Token public token2;
@@ -206,6 +209,7 @@ contract AMM {
         require(token1Amount < token1Balance, "swap amount too large");
     }
 
+    // Swaps token2 for token1
     function swapToken2(uint256 _token2Amount)
         external
         returns(uint256 token1Amount)

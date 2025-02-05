@@ -10,9 +10,9 @@ async function main() {
   const Token = await hre.ethers.getContractFactory('Token')
 
   // Deploy Token 1
-  let dapp = await Token.deploy('Dapp Token', 'DAPP', '1000000') // 1 million tokens
-  await dapp.deployed()
-  console.log(`Dapp Token deployed to: ${dapp.address}\n`)
+  let ssm = await Token.deploy('Saucy Sam', 'SSM', '1000000') // 1 million tokens
+  await ssm.deployed()
+  console.log(`SSM Token deployed to: ${ssm.address}\n`)
 
   // Deploy Token 2
   const usd = await Token.deploy('USD Token', 'USD', '1000000') // 1 million tokens
@@ -21,7 +21,7 @@ async function main() {
 
   // Deploy AMM
   const AMM = await hre.ethers.getContractFactory('AMM')
-  const amm = await AMM.deploy(dapp.address, usd.address)
+  const amm = await AMM.deploy(ssm.address, usd.address)
 
   console.log(`AMM contract deployed to: ${amm.address}\n`)
 

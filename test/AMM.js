@@ -393,6 +393,18 @@ describe('AMM', () => {
       balance = await token2.balanceOf(liquidityProvider.address)
       console.log(`LP token2 balance after removing liquidity: ${ethers.utils.formatUnits(balance)} \n`)
 
+      // // Check RemoveLiquidity event*******************
+      // await expect(transaction).to.emit(amm, 'RemoveLiquidity')
+      //   .withArgs(
+      //     liquidityProvider.address,
+      //     shares(50),
+      //     await token1.balanceOf(liquidityProvider.address),
+      //     await token2.balanceOf(liquidityProvider.address),
+      //     await amm.token1Balance(),
+      //     await amm.token2Balance(),
+      //     (await ethers.provider.getBlock(await ethers.provider.getBlockNumber())).timestamp
+      //   )
+
       // LP should have 0 shares
       expect(await amm.shares(liquidityProvider.address)).to.equal(0)
 

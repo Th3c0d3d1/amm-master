@@ -308,14 +308,15 @@ contract AMM {
         token1.transfer(msg.sender, token1Amount);
         token2.transfer(msg.sender, token2Amount);
 
-        emit RemoveLiquidity(
-            msg.sender,
-            _share,
-            token1Amount,
-            token2Amount,
-            token1Balance,
-            token2Balance,
-            block.timestamp
-        );
+    // Emit an event
+        // emit RemoveLiquidity(
+        //     msg.sender,
+        //     _share,
+        //     token1Amount,
+        //     token2Amount,
+        //     token1Balance,
+        //     token2Balance,
+        //     block.timestamp
+        // );
     }
 }

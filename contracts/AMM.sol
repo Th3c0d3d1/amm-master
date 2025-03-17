@@ -10,9 +10,9 @@ import "./Token.sol";
 // [] Manages withdrawals
 contract AMM {
 
-    // ------------------------------
-    // State Variables
-    // ------------------------------
+// ----------------------------------------------------------------------------------------------------
+//                                              Variables
+// ----------------------------------------------------------------------------------------------------
 
     // Calling the Token contract as token1 and token2
     Token public token1;
@@ -29,11 +29,19 @@ contract AMM {
     // Initial value is 0
     uint256 public totalShares;
 
+    // Used to calculate the precise amount of tokens to be swapped
+    uint256 constant PRECISION = 10**18;
+
+// ----------------------------------------------------------------------------------------------------
+//                                              Mappings
+// ----------------------------------------------------------------------------------------------------
+
     // Mapping to keep track of the shares of the users
     mapping(address => uint256) public shares;
 
-    // Used to calculate the precise amount of tokens to be swapped
-    uint256 constant PRECISION = 10**18;
+// ----------------------------------------------------------------------------------------------------
+//                                              Events
+// ----------------------------------------------------------------------------------------------------
 
     // Event to emit when a swap occurs
     event Swap(
@@ -47,13 +55,18 @@ contract AMM {
         uint256 timestamp
     );
 
+// ----------------------------------------------------------------------------------------------------
+//                                              Functions
+// ----------------------------------------------------------------------------------------------------
+
     // Setting the state variables
     constructor(Token _token1, Token _token2) {
         token1 = _token1;
         token2 = _token2;
     }
 
-    // Function to add liquidity to the pool
+//                                  Function to add liquidity to the pool
+//                                 ---------------------------------------
     // Deposits tokens
     // Issues shares
     // Manages pool
@@ -103,6 +116,9 @@ contract AMM {
         shares[msg.sender] += share;
     }
 
+//                           Functions to calculate the amount of tokens to be deposited
+//                           -----------------------------------------------------------
+
     // Determine how many token2 tokens must be deposited when depositing liquidity for token1
     function calculateToken2Deposit(uint256 _token1Amount)
         public
@@ -120,6 +136,9 @@ contract AMM {
     {
         token1Amount = (token1Balance * _token2Amount) / token2Balance;
     }
+
+//                               Function to deposit token1 and receive token2
+//                               ---------------------------------------------
 
     // Returns amount of token2 received when swapping token1
     // public ---> Can be called inside & outside the contract
@@ -144,7 +163,9 @@ contract AMM {
         require(token2Amount < token2Balance, "swap amount too large");
     }
 
-    // Swaps token1 for token2
+//                                 Swaps token1 for token2
+//                                 -----------------------
+
     // external ---> Called outside the contract
     // _token1Amount ---> Argument with amount of token1 to be swapped for token2
     // returns token2Amount ---> Returns the amount of token2 received
@@ -156,9 +177,8 @@ contract AMM {
         // Using the calculateToken1Swap function to honor the amount shown in the UI
         token2Amount = calculateToken1Swap(_token1Amount);
 
-        // ------------------------------
-        // Do Swap
-        // ------------------------------
+//                                          Do Swap
+//                              ------------------------------
 
         // Transfer token1 from the user to the contract
         // Use the transferFrom function from the Token contract with 3 arguments
@@ -175,9 +195,8 @@ contract AMM {
         // Use the transfer function from the Token contract with 2 arguments
         token2.transfer(msg.sender, token2Amount);
 
-        // ------------------------------
-        // Emit an event
-        // ------------------------------
+//                                      Emit an event
+//                                      -------------
         
         emit Swap(
             msg.sender,
@@ -190,6 +209,9 @@ contract AMM {
             block.timestamp
         );
     }
+
+//                            Function to deposit token 2 and receive token 1
+//                            -----------------------------------------------
 
     // Returns amount of token1 received when swapping token2
     function calculateToken2Swap(uint256 _token2Amount)
@@ -236,6 +258,9 @@ contract AMM {
         );
     }
 
+//                           Function to calculate the amount of tokens to be withdrawn
+//                           ----------------------------------------------------------
+
     // Determine how many tokens will be withdrawn
     function calculateWithdrawAmount(uint256 _share)
         public
@@ -246,6 +271,9 @@ contract AMM {
         token1Amount = (_share * token1Balance) / totalShares;
         token2Amount = (_share * token2Balance) / totalShares;
     }
+
+//                                 Function to remove liquidity from the pool
+//                                 ------------------------------------------
 
     // Removes liquidity from the pool
     function removeLiquidity(uint256 _share)

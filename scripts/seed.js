@@ -16,7 +16,7 @@ const shares = ether
 
 async function main() {
 
-  // Fetch accounts
+  // Fetch accounts from hardhat node
   console.log(`Fetching accounts & network \n`)
   const accounts = await ethers.getSigners()
   const deployer = accounts[0]
@@ -74,14 +74,20 @@ async function main() {
   const amm = await ethers.getContractAt('AMM', config[chainId].amm.address)
   console.log(`AMM fetched: ${amm.address}\n`)
 
+  // Approve AMM to spend ssm tokens
   transaction = await ssm.connect(deployer).approve(amm.address, amount)
   await transaction.wait()
 
+  // Approve AMM to spend usd tokens
   transaction = await usd.connect(deployer).approve(amm.address, amount)
   await transaction.wait()
 
   // Deployer adds liquidity
   console.log(`Adding liquidity...\n`)
+
+  // ssm and usd tokens are added in equal amounts
+  // ssm will trade for $1 as the initial price
+  // added in 1:1 ratio (amount, amount)
   transaction = await amm.connect(deployer).addLiquidity(amount, amount)
   await transaction.wait()
 
@@ -137,7 +143,7 @@ async function main() {
   transaction = await usd.connect(investor4).approve(amm.address, tokens(10))
   await transaction.wait()
 
-  // Investor swaps all 10 tokens
+  // Investor swaps 5 tokens
   transaction = await amm.connect(investor4).swapToken2(tokens(5))
   await transaction.wait()
 

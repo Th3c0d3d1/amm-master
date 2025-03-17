@@ -367,6 +367,40 @@ describe('AMM', () => {
 
       // Check price after swap
       console.log(`Price after swap: ${await amm.token2Balance() / await amm.token1Balance()} \n`)
+
+      // ------------------------------------------------
+      // Remove liquidity
+      // ------------------------------------------------
+
+      console.log(`AMM token1 balance: ${ethers.utils.formatUnits(await amm.token1Balance())} \n`)
+      console.log(`AMM token2 balance: ${ethers.utils.formatUnits(await amm.token2Balance())} \n`)
+
+      // Check LP balance before removing liquidity
+      balance = await token1.balanceOf(liquidityProvider.address)
+      console.log(`LP token1 balance before removing liquidity: ${ethers.utils.formatUnits(balance)} \n`)
+
+      balance = await token2.balanceOf(liquidityProvider.address)
+      console.log(`LP token2 balance before removing liquidity: ${ethers.utils.formatUnits(balance)} \n`)
+
+      // LP removes liquidity (50 shares***)
+      transaction = await amm.connect(liquidityProvider).removeLiquidity(shares(50))
+      await transaction.wait()
+
+      // Check LP balance after removing liquidity
+      balance = await token1.balanceOf(liquidityProvider.address)
+      console.log(`LP token1 balance after removing liquidity: ${ethers.utils.formatUnits(balance)} \n`)
+
+      balance = await token2.balanceOf(liquidityProvider.address)
+      console.log(`LP token2 balance after removing liquidity: ${ethers.utils.formatUnits(balance)} \n`)
+
+      // LP should have 0 shares
+      expect(await amm.shares(liquidityProvider.address)).to.equal(0)
+
+      // Deployer should still have 100 shares
+      expect(await amm.shares(deployer.address)).to.equal(shares(100))
+
+      // Pool shares should be 100
+      expect(await amm.totalShares()).to.equal(shares(100))
     })
   })
 })

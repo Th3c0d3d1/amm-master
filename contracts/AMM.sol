@@ -6,7 +6,7 @@ import "./Token.sol";
 
 // [X] App with only 1 trading pair
 // [X] Manages liquidity
-// [X] Manages swaps
+// [X] Manages swaps (trades)
 // [] Manages withdrawals
 contract AMM {
 
@@ -50,6 +50,16 @@ contract AMM {
         uint256 tokenGiveAmount,
         address tokenGet,
         uint256 tokenGetAmount,
+        uint256 token1Balance,
+        uint256 token2Balance,
+        uint256 timestamp
+    );
+
+    event RemoveLiquidity(
+        address user,
+        uint256 share,
+        uint256 token1Amount,
+        uint256 token2Amount,
         uint256 token1Balance,
         uint256 token2Balance,
         uint256 timestamp
@@ -262,6 +272,7 @@ contract AMM {
 //                           ----------------------------------------------------------
 
     // Determine how many tokens will be withdrawn
+    // Used to show the amount of tokens that will be withdrawn to user before the withdrawal
     function calculateWithdrawAmount(uint256 _share)
         public
         view
@@ -296,5 +307,15 @@ contract AMM {
 
         token1.transfer(msg.sender, token1Amount);
         token2.transfer(msg.sender, token2Amount);
+
+        emit RemoveLiquidity(
+            msg.sender,
+            _share,
+            token1Amount,
+            token2Amount,
+            token1Balance,
+            token2Balance,
+            block.timestamp
+        );
     }
 }

@@ -14,6 +14,7 @@ import Deposit from './Deposit';
 import Withdraw from './Withdraw';
 import Charts from './Charts';
 
+// Importing the interaction functions
 import {
   loadProvider,
   loadNetwork,
@@ -28,11 +29,13 @@ function App() {
   const dispatch = useDispatch()
 
   const loadBlockchainData = async () => {
+
     // Initiate provider
     // Returns a provider object that is used to interact with the blockchain
     const provider = await loadProvider(dispatch)
 
     // Fetch current network's chainId (e.g. hardhat: 31337, kovan: 42)
+    // Returns the chainId of the current network in the payload to the reducer
     const chainId = await loadNetwork(provider, dispatch)
 
     // Reload page when network changes
@@ -41,7 +44,7 @@ function App() {
     })
 
     // Fetch current account from Metamask when changed
-    // Payload passed to setAccount action in provider reducer
+    // Returns the account address in the payload to the reducer
     window.ethereum.on('accountsChanged', async () => {
       await loadAccount(dispatch)
     })

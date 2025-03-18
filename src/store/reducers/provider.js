@@ -14,16 +14,21 @@ export const provider = createSlice({
     account: null
   },
   reducers: {
+
+    // Action creator that sets the provider in the provider slice of the state
+    // ex. use instead of: const [provider, setProvider] = useState(null)
     setProvider: (state, action) => {
       state.connection = action.payload
     },
     setNetwork: (state, action) => {
       state.chainId = action.payload
     },
+
     // Triggers an action by calling setAccount function in App.js
     // Action creator that sets the account in the provider slice of the state
     // ex. use instead of: const [account, setAccount] = useState(null)
     setAccount: (state, action) => {
+
       // Make the state of the account equal to the payload
       // The payload is the account address argument passed to the action in App.js
       state.account = action.payload

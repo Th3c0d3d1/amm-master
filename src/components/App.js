@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+
+// Dispatches actions to the store through the reducer functions
 import { useDispatch } from 'react-redux'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
@@ -22,10 +24,12 @@ import {
 
 function App() {
 
+  // Hook that returns a reference to the dispatch function from the Redux store
   const dispatch = useDispatch()
 
   const loadBlockchainData = async () => {
     // Initiate provider
+    // Returns a provider object that is used to interact with the blockchain
     const provider = await loadProvider(dispatch)
 
     // Fetch current network's chainId (e.g. hardhat: 31337, kovan: 42)
@@ -37,6 +41,7 @@ function App() {
     })
 
     // Fetch current account from Metamask when changed
+    // Payload passed to setAccount action in provider reducer
     window.ethereum.on('accountsChanged', async () => {
       await loadAccount(dispatch)
     })

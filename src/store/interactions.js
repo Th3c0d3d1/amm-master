@@ -92,14 +92,14 @@ export const loadAccount = async (dispatch) => {
 // Calls dispatch function to update the contracts and symbols in the tokens slice of the state
 // Returns the contract objects and symbols
 export const loadTokens = async (provider, chainId, dispatch) => {
-  const dapp = new ethers.Contract(config[chainId].dapp.address, TOKEN_ABI, provider)
+  const ssm = new ethers.Contract(config[chainId].ssm.address, TOKEN_ABI, provider)
   const usd = new ethers.Contract(config[chainId].usd.address, TOKEN_ABI, provider)
 
   // Dispatch the setContracts action to update the contracts arg of the tokens slice of the state
-  dispatch(setContracts([dapp, usd]))
+  dispatch(setContracts([ssm, usd]))
 
   // Dispatch the setSymbols action to update the symbols arg of the tokens slice of the state
-  dispatch(setSymbols([await dapp.symbol(), await usd.symbol()]))
+  dispatch(setSymbols([await ssm.symbol(), await usd.symbol()]))
 }
 
 // ------------------------------------------------------------------------------
@@ -199,7 +199,7 @@ export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
     transaction = await token.connect(signer).approve(amm.address, amount)
     await transaction.wait()
 
-    if (symbol === "DAPP") {
+    if (symbol === "SSM") {
       transaction = await amm.connect(signer).swapToken1(amount)
     } else {
       transaction = await amm.connect(signer).swapToken2(amount)

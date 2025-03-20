@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 // Dispatches actions to the store through the reducer functions
 import { useDispatch } from 'react-redux'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import { ethers } from 'ethers'
 
 // Components
 import Navigation from './Navigation';
@@ -46,6 +45,7 @@ function App() {
     // Fetch current account from Metamask when changed
     // Returns the account address in the payload to the reducer
     window.ethereum.on('accountsChanged', async () => {
+      // console.log('Account changed')
       await loadAccount(dispatch)
     })
 

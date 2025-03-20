@@ -62,6 +62,7 @@ const Navigation = () => {
             <option value="0x7A69">Localhost</option>
             <option value="0x5">Goerli</option>
           </Form.Select>
+
           {account ? (
 
             // Account display - OP

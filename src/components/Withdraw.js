@@ -37,10 +37,13 @@ const Withdraw = () => {
   const withdrawHandler = async (e) => {
     e.preventDefault()
 
+    // Update Alert to not show before withdrawal using useState - OP
     setShowAlert(false)
 
+    // Convert amount to shares - OP
     const _shares = ethers.utils.parseUnits(amount.toString(), 'ether')
 
+    // Call removeLiquidity function from interactions - OP
     await removeLiquidity(
       provider,
       amm,
@@ -48,22 +51,28 @@ const Withdraw = () => {
       dispatch
     )
 
+    // Call loadBalances function from interactions - OP
     await loadBalances(amm, tokens, account, dispatch)
 
+    // Update Alert to show after withdrawal using useState - OP
     setShowAlert(true)
     setAmount(0)
   }
-
   return (
     <div>
+
+      {/* Bootsrap Card - OP */}
       <Card style={{ maxWidth: '450px' }} className='mx-auto px-4'>
         {account ? (
-          <Form onSubmit={withdrawHandler} style={{ maxWidth: '450px', margin: '50px auto' }}>
 
+          // Form for withdrawing liquidity - OP
+          <Form onSubmit={withdrawHandler} style={{ maxWidth: '450px', margin: '50px auto' }}>
             <Row>
               <Form.Text className='text-end my-2' muted>
                 Shares: {shares}
               </Form.Text>
+
+              {/* Input for amount of shares to withdraw - OP */}
               <InputGroup>
                 <Form.Control
                   type="number"
@@ -79,25 +88,29 @@ const Withdraw = () => {
                 </InputGroup.Text>
               </InputGroup>
             </Row>
-
             <Row className='my-3'>
               {isWithdrawing ? (
+
+                // Spinner for loading - OP
                 <Spinner animation="border" style={{ display: 'block', margin: '0 auto' }} />
               ) : (
+
+                // Button for withdrawing - OP
                 <Button type="submit">Withdraw</Button>
               )}
             </Row>
 
             <hr />
 
+            {/* Displaying balance */}
             <Row>
-              <p><strong>DAPP Balance:</strong> {balances[0]}</p>
+              <p><strong>SSM Balance:</strong> {balances[0]}</p>
               <p><strong>USD Balance:</strong> {balances[1]}</p>
             </Row>
-
           </Form>
-
         ) : (
+
+          // Message to connect wallet - OP
           <p
             className='d-flex justify-content-center align-items-center'
             style={{ height: '300px' }}
@@ -108,6 +121,8 @@ const Withdraw = () => {
       </Card>
 
       {isWithdrawing ? (
+
+        // Alert for pending withdrawal - OP
         <Alert
           message={'Withdraw Pending...'}
           transactionHash={null}
@@ -115,6 +130,8 @@ const Withdraw = () => {
           setShowAlert={setShowAlert}
         />
       ) : isSuccess && showAlert ? (
+
+        // Alert for successful withdrawal - OP
         <Alert
           message={'Withdraw Successful'}
           transactionHash={transactionHash}
@@ -122,6 +139,8 @@ const Withdraw = () => {
           setShowAlert={setShowAlert}
         />
       ) : !isSuccess && showAlert ? (
+
+        // Alert for failed withdrawal - OP
         <Alert
           message={'Withdraw Failed'}
           transactionHash={null}
@@ -131,7 +150,6 @@ const Withdraw = () => {
       ) : (
         <></>
       )}
-
     </div>
   );
 }

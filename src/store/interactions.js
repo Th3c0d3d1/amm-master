@@ -220,7 +220,6 @@ export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
 
 export const loadAllSwaps = async (provider, amm, dispatch) => {
   const block = await provider.getBlockNumber()
-
   const swapStream = await amm.queryFilter('Swap', 0, block)
   const swaps = swapStream.map(event => {
     return { hash: event.transactionHash, args: event.args }

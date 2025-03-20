@@ -45,8 +45,10 @@ const Charts = () => {
 
           <hr />
 
+          {/* Table -OP */}
           <Table striped bordered hover>
             <thead>
+              
               <tr>
                 <th>Transaction Hash</th>
                 <th>Token Give</th>
@@ -58,6 +60,7 @@ const Charts = () => {
               </tr>
             </thead>
             <tbody>
+              
               {chart.swaps && chart.swaps.map((swap, index) => (
                 <tr key={index}>
                   <td>{swap.hash.slice(0, 5) + '...' + swap.hash.slice(61, 66)}</td>

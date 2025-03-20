@@ -78,11 +78,14 @@ const Deposit = () => {
 
   return (
     <div>
+
+      {/* Bootsrap Card - OP */}
       <Card style={{ maxWidth: '450px' }} className='mx-auto px-4'>
         {account ? (
           <Form onSubmit={depositHandler} style={{ maxWidth: '450px', margin: '50px auto' }}>
-
             <Row>
+
+              {/*  */}
               <Form.Text className='text-end my-2' muted>
                 Balance: {balances[0]}
               </Form.Text>
@@ -101,8 +104,9 @@ const Deposit = () => {
                 </InputGroup.Text>
               </InputGroup>
             </Row>
-
             <Row className='my-3'>
+
+              {/*  */}
               <Form.Text className='text-end my-2' muted>
                 Balance:  {balances[1]}
               </Form.Text>
@@ -120,17 +124,23 @@ const Deposit = () => {
                 </InputGroup.Text>
               </InputGroup>
             </Row>
-
             <Row className='my-3'>
+
+              {/* Deposit Button - OP */}
               {isDepositing ? (
+
+                // Spinner for loading - OP
                 <Spinner animation="border" style={{ display: 'block', margin: '0 auto' }} />
               ) : (
+
+                // Button for depositing - OP
                 <Button type="submit">Deposit</Button>
               )}
             </Row>
           </Form>
-
         ) : (
+
+          // Placeholder for demonstration - OP
           <p
             className='d-flex justify-content-center align-items-center'
             style={{ height: '300px' }}
@@ -141,6 +151,8 @@ const Deposit = () => {
       </Card>
 
       {isDepositing ? (
+
+        // Alert for deposit Pending - OP
         <Alert
           message={'Deposit Pending...'}
           transactionHash={null}
@@ -148,6 +160,8 @@ const Deposit = () => {
           setShowAlert={setShowAlert}
         />
       ) : isSuccess && showAlert ? (
+
+        // Alert for deposit success - OP
         <Alert
           message={'Deposit Successful'}
           transactionHash={transactionHash}
@@ -155,6 +169,8 @@ const Deposit = () => {
           setShowAlert={setShowAlert}
         />
       ) : !isSuccess && showAlert ? (
+
+        // Alert for deposit failure - OP
         <Alert
           message={'Deposit Failed'}
           transactionHash={null}
@@ -164,7 +180,6 @@ const Deposit = () => {
       ) : (
         <></>
       )}
-
     </div>
   );
 }

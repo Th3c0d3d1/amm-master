@@ -52,7 +52,7 @@ const Swap = () => {
       return
     }
 
-    if (inputToken === 'DAPP') {
+    if (inputToken === 'SSM') {
       setInputAmount(e.target.value)
 
       const _token1Amount = ethers.utils.parseUnits(e.target.value, 'ether')
@@ -86,7 +86,7 @@ const Swap = () => {
     const _inputAmount = ethers.utils.parseUnits(inputAmount, 'ether')
 
     // Swap token depending upon which one we're doing...
-    if (inputToken === "DAPP") {
+    if (inputToken === "SSM") {
       await swap(provider, amm, tokens[0], inputToken, _inputAmount, dispatch)
     } else {
       await swap(provider, amm, tokens[1], inputToken, _inputAmount, dispatch)
@@ -94,9 +94,7 @@ const Swap = () => {
 
     await loadBalances(amm, tokens, account, dispatch)
     await getPrice()
-
     setShowAlert(true)
-
   }
 
   const getPrice = async () => {
@@ -105,7 +103,7 @@ const Swap = () => {
       return
     }
 
-    if (inputToken === 'DAPP') {
+    if (inputToken === 'SSM') {
       setPrice(await amm.token2Balance() / await amm.token1Balance())
     } else {
       setPrice(await amm.token1Balance() / await amm.token2Balance())
@@ -117,14 +115,18 @@ const Swap = () => {
       getPrice()
     }
   }, [inputToken, outputToken]);
-
   return (
     <div>
+
+      {/* Bootsrap Card - OP*/}
       <Card style={{ maxWidth: '450px' }} className='mx-auto px-4'>
         {account ? (
-          <Form onSubmit={swapHandler} style={{ maxWidth: '450px', margin: '50px auto' }}>
 
+          // Form for swapping tokens - OP
+          <Form onSubmit={swapHandler} style={{ maxWidth: '450px', margin: '50px auto' }}>
             <Row className='my-3'>
+
+              {/* Input token - OP*/}
               <div className='d-flex justify-content-between'>
                 <Form.Label><strong>Input:</strong></Form.Label>
                 <Form.Text muted>
@@ -137,6 +139,8 @@ const Swap = () => {
                   }
                 </Form.Text>
               </div>
+
+              {/* Input token dropdown - OP*/}
               <InputGroup>
                 <Form.Control
                   type="number"
@@ -146,17 +150,22 @@ const Swap = () => {
                   onChange={(e) => inputHandler(e) }
                   disabled={!inputToken}
                 />
+
+                {/* Input token dropdown button - OP */}
                 <DropdownButton
                   variant="outline-secondary"
                   title={inputToken ? inputToken : "Select Token"}
                 >
-                  <Dropdown.Item onClick={(e) => setInputToken(e.target.innerHTML)} >DAPP</Dropdown.Item>
+
+                  {/* Input token dropdown items - OP */}
+                  <Dropdown.Item onClick={(e) => setInputToken(e.target.innerHTML)} >SSM</Dropdown.Item>
                   <Dropdown.Item onClick={(e) => setInputToken(e.target.innerHTML)} >USD</Dropdown.Item>
                 </DropdownButton>
               </InputGroup>
             </Row>
-
             <Row className='my-4'>
+
+              {/* Output token - OP */}
               <div className='d-flex justify-content-between'>
                 <Form.Label><strong>Output:</strong></Form.Label>
                 <Form.Text muted>
@@ -169,6 +178,8 @@ const Swap = () => {
                   }
                 </Form.Text>
               </div>
+
+              {/* Output token dropdown - OP */}
               <InputGroup>
                 <Form.Control
                   type="number"
@@ -176,31 +187,41 @@ const Swap = () => {
                   value={outputAmount === 0 ? "" : outputAmount }
                   disabled
                 />
+
+                {/* Output token dropdown button - OP */}
                 <DropdownButton
                   variant="outline-secondary"
                   title={outputToken ? outputToken : "Select Token"}
                 >
-                  <Dropdown.Item onClick={(e) => setOutputToken(e.target.innerHTML)}>DAPP</Dropdown.Item>
+
+                  {/* Output token dropdown items - OP */}
+                  <Dropdown.Item onClick={(e) => setOutputToken(e.target.innerHTML)}>SSM</Dropdown.Item>
                   <Dropdown.Item onClick={(e) => setOutputToken(e.target.innerHTML)}>USD</Dropdown.Item>
                 </DropdownButton>
               </InputGroup>
             </Row>
-
             <Row className='my-3'>
+
+              {/* Swap button - OP */}
               {isSwapping ? (
+
+                // Spinner for loading - OP
                 <Spinner animation="border" style={{ display: 'block', margin: '0 auto' }} />
               ): (
+
+                // Button for swapping - OP
                 <Button type='submit'>Swap</Button>
               )}
 
+              {/* Exchange rate - OP */}
               <Form.Text muted>
                 Exchange Rate: {price}
               </Form.Text>
             </Row>
-
           </Form>
-
         ) : (
+
+          // Message to connect wallet - OP
           <p
             className='d-flex justify-content-center align-items-center'
             style={{ height: '300px' }}
@@ -211,6 +232,8 @@ const Swap = () => {
       </Card>
 
       {isSwapping ? (
+
+        // Alert for pending - OP
         <Alert
           message={'Swap Pending...'}
           transactionHash={null}
@@ -218,6 +241,8 @@ const Swap = () => {
           setShowAlert={setShowAlert}
         />
       ) : isSuccess && showAlert ? (
+
+        // Alert for success - OP
         <Alert
           message={'Swap Successful'}
           transactionHash={transactionHash}
@@ -225,6 +250,8 @@ const Swap = () => {
           setShowAlert={setShowAlert}
         />
       ) : !isSuccess && showAlert ? (
+
+        // Alert for failure - OP
         <Alert
           message={'Swap Failed'}
           transactionHash={null}
@@ -234,7 +261,6 @@ const Swap = () => {
       ) : (
         <></>
       )}
-
     </div>
   );
 }

@@ -18,7 +18,9 @@ export const options = {
   },
   grid: {
     row: {
-      colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+      
+      // takes an array which will be repeated on columns
+      colors: ['#f3f3f3', 'transparent'], 
       opacity: 0.5
     },
   }

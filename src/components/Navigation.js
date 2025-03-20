@@ -31,7 +31,11 @@ const Navigation = () => {
   }
 
   return (
+
+    // Bootstrap Navbar component - OP
     <Navbar className='my-3' expand="lg">
+
+      {/* Logo */}
       <img
         alt="logo"
         src={logo}
@@ -39,13 +43,15 @@ const Navigation = () => {
         height="40"
         className="d-inline-block align-top mx-3"
       />
-      <Navbar.Brand href="#">Saucy Sam AMM</Navbar.Brand>
 
+      {/* Brand */}
+      <Navbar.Brand href="#">Saucy Sam AMM</Navbar.Brand>
       <Navbar.Toggle aria-controls="nav" />
       <Navbar.Collapse id="nav" className="justify-content-end">
 
         <div className="d-flex justify-content-end mt-3">
 
+          {/* Network Selector dropdown - OP */}
           <Form.Select
             aria-label="Network Selector"
             value={config[chainId] ? `0x${chainId.toString(16)}` : `0`}
@@ -56,10 +62,13 @@ const Navigation = () => {
             <option value="0x7A69">Localhost</option>
             <option value="0x5">Goerli</option>
           </Form.Select>
-
           {account ? (
+
+            // Account display - OP
             <Navbar.Text className='d-flex align-items-center'>
               {account.slice(0, 5) + '...' + account.slice(38, 42)}
+
+              {/* Blockies identicon - OP */}
               <Blockies
                 seed={account}
                 size={10}
@@ -71,11 +80,11 @@ const Navigation = () => {
               />
             </Navbar.Text>
           ) : (
+
+            // Connect button - OP
             <Button onClick={connectHandler}>Connect</Button>
           )}
-
         </div>
-
       </Navbar.Collapse>
     </Navbar>
   );

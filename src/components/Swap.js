@@ -18,15 +18,20 @@ import {
 } from '../store/interactions'
 
 const Swap = () => {
+
+  // Set local in\output state variables
   const [inputToken, setInputToken] = useState(null)
   const [outputToken, setOutputToken] = useState(null)
   const [inputAmount, setInputAmount] = useState(0)
   const [outputAmount, setOutputAmount] = useState(0)
 
+  // Set local price state variable
   const [price, setPrice] = useState(0)
 
+  // Set local alert state variable
   const [showAlert, setShowAlert] = useState(false)
 
+  // Read from the store
   const provider = useSelector(state => state.provider.connection)
   const account = useSelector(state => state.provider.account)
 
@@ -92,8 +97,11 @@ const Swap = () => {
       await swap(provider, amm, tokens[1], inputToken, _inputAmount, dispatch)
     }
 
+    // Load balances after swapping
     await loadBalances(amm, tokens, account, dispatch)
     await getPrice()
+
+    // Show alert
     setShowAlert(true)
   }
 
@@ -214,6 +222,7 @@ const Swap = () => {
               )}
 
               {/* Exchange rate - OP */}
+              {/* Exchange rate called from state */}
               <Form.Text muted>
                 Exchange Rate: {price}
               </Form.Text>

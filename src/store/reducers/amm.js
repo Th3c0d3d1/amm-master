@@ -8,17 +8,17 @@ export const amm = createSlice({
     swaps: [],
     depositing: {
       isDepositing: false,
-      isSucccess: false,
+      isSuccess: false,
       transactionHash: null
     },
     withdrawing: {
       isWithdrawing: false,
-      isSucccess: false,
+      isSuccess: false,
       transactionHash: null
     },
     swapping: {
       isSwapping: false,
-      isSucccess: false,
+      isSuccess: false,
       transactionHash: null
     }
   },

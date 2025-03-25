@@ -187,6 +187,7 @@ export const removeLiquidity = async (provider, amm, shares, dispatch) => {
 //                                     SWAP
 // ------------------------------------------------------------------------------
 
+// Calls dispatch function to update the swap status in the amm slice of the state
 export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
   try {
 
@@ -196,9 +197,11 @@ export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
 
     const signer = await provider.getSigner()
 
+    // Approve the AMM to spend the token
     transaction = await token.connect(signer).approve(amm.address, amount)
     await transaction.wait()
 
+    // Swap token depending upon which one we're doing...
     if (symbol === "SSM") {
       transaction = await amm.connect(signer).swapToken1(amount)
     } else {
@@ -207,8 +210,10 @@ export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
 
     await transaction.wait()
 
+    // Dispatch the swapSuccess action to update the swap status in the amm slice of the state
     dispatch(swapSuccess(transaction.hash))
 
+    // Catch any errors and dispatch the swapFail action to update the swap status in the amm slice of the state
   } catch (error) {
     dispatch(swapFail())
   }

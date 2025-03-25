@@ -11,6 +11,10 @@ import { loadAccount, loadBalances } from '../store/interactions'
 import config from '../config.json'
 
 const Navigation = () => {
+
+  // Reading from the store
+  // Hook that returns the current state of the variable from the provider slice of the state
+  // Taking components out of the redux store after dispatching them
   const chainId = useSelector(state => state.provider.chainId)
   const account = useSelector(state => state.provider.account)
   const tokens = useSelector(state => state.tokens.contracts)
@@ -18,6 +22,8 @@ const Navigation = () => {
 
   const dispatch = useDispatch()
 
+  // Function to connect to Metamask
+  // Uses the loadAccount and loadBalances functions from interactions.js
   const connectHandler = async () => {
     const account = await loadAccount(dispatch)
     await loadBalances(amm, tokens, account, dispatch)
@@ -31,11 +37,7 @@ const Navigation = () => {
   }
 
   return (
-
-    // Bootstrap Navbar component - OP
     <Navbar className='my-3' expand="lg">
-
-      {/* Logo */}
       <img
         alt="logo"
         src={logo}
@@ -43,15 +45,13 @@ const Navigation = () => {
         height="40"
         className="d-inline-block align-top mx-3"
       />
-
-      {/* Brand */}
       <Navbar.Brand href="#">Saucy Sam AMM</Navbar.Brand>
+
       <Navbar.Toggle aria-controls="nav" />
       <Navbar.Collapse id="nav" className="justify-content-end">
 
         <div className="d-flex justify-content-end mt-3">
 
-          {/* Network Selector dropdown - OP */}
           <Form.Select
             aria-label="Network Selector"
             value={config[chainId] ? `0x${chainId.toString(16)}` : `0`}
@@ -63,14 +63,16 @@ const Navigation = () => {
             <option value="0x5">Goerli</option>
           </Form.Select>
 
+          {/* Loading account with truncating address on UI */}
           {account ? (
-
-            // Account display - OP
             <Navbar.Text className='d-flex align-items-center'>
               {account.slice(0, 5) + '...' + account.slice(38, 42)}
 
-              {/* Blockies identicon - OP */}
+              {/* Blockies generates icon next to account # */}
+              {/* Imported from react */}
               <Blockies
+
+                // React component that generates a unique icon based on the seed
                 seed={account}
                 size={10}
                 scale={3}
@@ -82,7 +84,8 @@ const Navigation = () => {
             </Navbar.Text>
           ) : (
 
-            // Connect button - OP
+            // Button to connect to Metamask
+            // Calls connectHandler function when clicked
             <Button onClick={connectHandler}>Connect</Button>
           )}
         </div>

@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const amm = createSlice({
+
+  // Slice name
   name: 'amm',
+
+  // Setting the initial slice states
   initialState: {
     contract: null,
     shares: 0,
@@ -22,6 +26,8 @@ export const amm = createSlice({
       transactionHash: null
     }
   },
+
+  // Setting the reducers
   reducers: {
     setContract: (state, action) => {
       state.contract = action.payload

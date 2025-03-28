@@ -229,11 +229,18 @@ export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
 // ------------------------------------------------------------------------------
 
 export const loadAllSwaps = async (provider, amm, dispatch) => {
+
+  // Get the current block number
   const block = await provider.getBlockNumber()
+
+  // Get all the swap events from the AMM contract
   const swapStream = await amm.queryFilter('Swap', 0, block)
+
+  // Map the events to a more readable format
   const swaps = swapStream.map(event => {
     return { hash: event.transactionHash, args: event.args }
   })
 
+  // Dispatch the swapsLoaded action to update the swaps arg of the amm slice
   dispatch(swapsLoaded(swaps))
 }

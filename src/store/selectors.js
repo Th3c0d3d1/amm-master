@@ -4,6 +4,9 @@ const tokens = state => state.tokens.contracts
 const swaps = state => state.amm.swaps
 
 export const chartSelector = createSelector(swaps, tokens, (swaps, tokens) => {
+
+  // Build chart data
+  // If tokens don't exist, return the function
   if (!tokens[0] || !tokens[1]) { return }
 
   // Filter swaps by selected tokens
@@ -19,23 +22,27 @@ export const chartSelector = createSelector(swaps, tokens, (swaps, tokens) => {
   // Fetch prices
   const prices = swaps.map(s => s.rate)
 
+  // Sort swaps by date descending for chart
   swaps = swaps.sort((a, b) => b.args.timestamp - a.args.timestamp)
 
   return({
     swaps: swaps,
     series: [{
-      name: "Rate",
+      name: "Exchange Rate",
       data: prices
     }]
   })
 })
 
 const decorateSwap = (swap) => {
-  // Calculate token price to 5 decimal places
+
+  // Calculate to 5 decimal places
   const precision = 100000
 
+  // Calculate the exchange rate
   let rate = (swap.args.token2Balance / swap.args.token1Balance)
 
+  // Round the rate
   rate = Math.round(rate * precision) / precision
 
   return({

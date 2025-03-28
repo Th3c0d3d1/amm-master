@@ -13,7 +13,7 @@ export const options = {
     curve: 'straight'
   },
   title: {
-    text: 'Reserve History',
+    text: "Saucy's Swap History",
     align: 'left'
   },
   grid: {
@@ -26,7 +26,7 @@ export const options = {
   }
 }
 
-// Code in the series as a temporary placeholder for demonstration
+// Default placeholder series 
 export const series = [{
   data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
 }]

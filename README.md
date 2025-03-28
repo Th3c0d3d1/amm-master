@@ -29,7 +29,41 @@ This project showcases a full-stack blockchain application, including a smart co
 
 ## Project Structure
 
-. ├── .gitignore ├── artifacts/ ├── cache/ ├── contracts/ │ ├── AMM.sol │ └── Token.sol ├── hardhat.config.js ├── package.json ├── public/ │ ├── index.html │ └── manifest.json ├── scripts/ │ ├── deploy.js │ └── seed.js ├── src/ │ ├── abis/ │ │ ├── AMM.json │ │ └── Token.json │ ├── components/ │ │ ├── App.js │ │ ├── Swap.js │ │ ├── Deposit.js │ │ ├── Withdraw.js │ │ └── Charts.js │ ├── store/ │ │ ├── reducers/ │ │ └── interactions.js │ ├── index.css │ ├── index.js │ └── reportWebVitals.js ├── test/ │ ├── AMM.js │ └── Token.js └── README.md
+.
+├── .gitignore
+├── artifacts/
+├── cache/
+├── contracts/
+│ ├── AMM.sol
+│ └── Token.sol
+├── hardhat.config.js
+├── package.json
+├── public/
+│ ├── index.html
+│ └── manifest.json
+├── scripts/
+│ ├── deploy.js
+│ └── seed.js
+├── src/
+│ ├── abis/
+│ │ ├── AMM.json
+│ │ └── Token.json
+│ ├── components/
+│ │ ├── App.js
+│ │ ├── Swap.js
+│ │ ├── Deposit.js
+│ │ ├── Withdraw.js
+│ │ └── Charts.js
+│ ├── store/
+│ │ ├── reducers/
+│ │ └── interactions.js
+│ ├── index.css
+│ ├── index.js
+│ └── reportWebVitals.js
+├── test/
+│ ├── AMM.js
+│ └── Token.js
+└── README.md
 
 
 ## Setup Instructions
